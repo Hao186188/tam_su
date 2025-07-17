@@ -10,7 +10,6 @@ const toggleBtn = document.getElementById("musicToggle");
 
 if (toggleBtn && music) {
   music.volume = 0.3;
-
   toggleBtn.onclick = () => {
     if (music.paused) {
       music.play().catch(() => {});
@@ -20,8 +19,6 @@ if (toggleBtn && music) {
       toggleBtn.textContent = "🔇 Bật nhạc";
     }
   };
-
-  // ✅ Autoplay sau lần click đầu
   document.body.addEventListener("click", () => {
     if (music.paused) music.play().catch(() => {});
   }, { once: true });
@@ -44,6 +41,9 @@ audio.volume = 0.4;
 const typewriterEl = document.getElementById("typewriter");
 const letterBox = document.querySelector('.letter');
 const channel = new BroadcastChannel("tam_su_channel");
+
+// 🔥 Firebase
+const db = firebase.database();
 
 function typeNext() {
   if (textIndex < texts.length) {
@@ -135,28 +135,36 @@ function saveMessage() {
   btn.disabled = true;
   btn.innerText = "Đang gửi...";
 
-  const saved = localStorage.getItem("messages") || "[]";
-  const messages = JSON.parse(saved);
   const newMsg = {
     id: Date.now(),
     time: new Date().toLocaleString(),
     content: message
   };
 
-  messages.push(newMsg);
-  localStorage.setItem("messages", JSON.stringify(messages));
+  // 🔥 Lưu vào Firebase
+  db.ref("messages").push(newMsg)
+    .then(() => {
+      const saved = localStorage.getItem("messages") || "[]";
+      const messages = JSON.parse(saved);
+      messages.push(newMsg);
+      localStorage.setItem("messages", JSON.stringify(messages));
 
-  // Gửi sang trang quản lý nếu đang mở
-  channel.postMessage(newMsg);
+      channel.postMessage(newMsg);
+      showToast("💖 Tâm sự của cậu đã được lưu lại! Có gì thì liên hệ tớ ở Facebook nha 💬");
 
-  showToast("💖 Tâm sự của cậu đã được lưu lại! Có gì thì liên hệ tớ ở Facebook nha 💬");
+      textarea.value = "";
+      btn.disabled = false;
+      btn.innerText = "📩 Gửi tâm sự";
 
-  textarea.value = "";
-  btn.disabled = false;
-  btn.innerText = "Gửi tâm sự";
-
-  letterBox?.classList.add("sent");
-  setTimeout(() => letterBox?.classList.remove("sent"), 1000);
+      letterBox?.classList.add("sent");
+      setTimeout(() => letterBox?.classList.remove("sent"), 1000);
+    })
+    .catch(err => {
+      console.error("❌ Gửi thất bại:", err);
+      alert("Có lỗi xảy ra khi gửi tâm sự. Vui lòng thử lại.");
+      btn.disabled = false;
+      btn.innerText = "📩 Gửi tâm sự";
+    });
 }
 
 // 🗂 TXT
@@ -198,11 +206,3 @@ window.onload = () => {
   typeNext();
   startDecor();
 };
-// // 🗣️ Nhận tin nhắn từ trang quản lý
-// channel.onmessage = (event) => {
-//   const message = event.data;
-//   if (message && message.content) {
-//     showToast("💌 Có lời tâm sự mới từ trang quản lý!");
-//     loadMessages(); // Cập nhật danh sách tin nhắn
-//   }
-// };
