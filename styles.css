@@ -1,0 +1,279 @@
+/* === Cấu hình cơ bản === */
+body {
+  background-color: rgb(211, 210, 210);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Padding nhẹ cho mobile tránh sát mép */
+@media (max-width: 600px) {
+  body {
+    padding: 0 5px;
+  }
+}
+
+/* Tiêu đề và đoạn văn */
+h1, p {
+  color: rgb(255, 123, 145);
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* === Canvas nền hiệu ứng === */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+/* === Hiệu ứng trái tim rơi === */
+.heart {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 0;
+  background: linear-gradient(to bottom, #ff758c, #ff7eb3);
+  transform: rotate(-45deg);
+  animation: fall 6s linear infinite;
+  z-index: 1;
+}
+.heart::before,
+.heart::after {
+  content: '';
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background: inherit;
+  border-radius: 50%;
+}
+.heart::before {
+  top: -12px;
+  left: 0;
+}
+.heart::after {
+  left: 12px;
+  top: 0;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-100px) rotate(-45deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+/* === Hiệu ứng lấp lánh === */
+.sparkle {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px white;
+  animation: sparkle 3s infinite ease-in-out;
+  z-index: 1;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+}
+
+/* === Hộp thư (nơi hiển thị chữ chạy) === */
+.letter {
+  max-width: 600px;
+  max-height: 300px;
+  margin: 60px auto 20px;
+  padding: 30px;
+  background-color: #fff8f0;
+  border: 2px solid #ffb6c1;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  font-family: 'Courier New', monospace, system-ui, sans-serif;
+  font-size: 18px;
+  color: #444;
+  line-height: 1.6;
+  min-height: 200px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.letter::-webkit-scrollbar {
+  width: 6px;
+}
+.letter::-webkit-scrollbar-thumb {
+  background-color: #ffc0cb;
+  border-radius: 10px;
+}
+
+/* === Hiệu ứng chữ chạy === */
+.typewriter {
+  white-space: pre-line;
+}
+
+#typewriter {
+  border-right: 2px solid #ff7eb3;
+  animation: blink 0.75s step-end infinite;
+  padding-right: 5px;
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+/* === Các nút điều hướng === */
+.buttons {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.buttons button {
+  background-color: rgb(255, 123, 145);
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  margin: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.buttons button:hover {
+  background-color: rgb(255, 105, 130);
+}
+
+/* === Khung nhập tâm sự === */
+#form-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+textarea {
+  width: 80%;
+  max-width: 600px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  background-color: #fffefc;
+  font-family: 'Courier New', monospace, system-ui, sans-serif;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+textarea::-webkit-scrollbar {
+  width: 6px;
+}
+textarea::-webkit-scrollbar-thumb {
+  background-color: #ffc0cb;
+  border-radius: 10px;
+}
+
+/* === Responsive cho điện thoại === */
+@media (max-width: 600px) {
+  .letter {
+    margin: 40px 10px;
+    padding: 20px 25px;
+    font-size: 16px;
+  }
+
+  .buttons button {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    font-size: 15px;
+    padding: 10px 15px;
+  }
+
+  textarea {
+    width: 90%;
+    font-size: 15px;
+    padding: 20px 25px;
+  }
+
+  h1 {
+    font-size: 22px;
+    margin: 15px;
+  }
+
+  .heart {
+    display: none; /* Tắt hiệu ứng trái tim trên mobile nếu cần */
+  }
+}
+/* === Toast nâng cấp === */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff0f5;
+  color: #d63384;
+  padding: 14px 20px;
+  border-radius: 30px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 9999;
+  animation: fadeInOut 5s ease forwards;
+}
+
+.toast-icon {
+  font-size: 24px;
+}
+
+.toast-message {
+  flex: 1;
+  font-weight: 500;
+}
+
+.toast-btn {
+  background: #ff69b4;
+  color: white;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.toast-btn:hover {
+  background: #ff4081;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  10%, 90% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+}
+/* === Responsive cho Toast === */

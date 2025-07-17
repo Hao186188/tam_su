@@ -1,0 +1,68 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #fdf6f9;
+  color: #333;
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: 1.5rem;
+  text-align: center;
+  color: #d6336c;
+  margin-bottom: 20px;
+}
+
+#adminPass {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #d6336c;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #ad1f52;
+}
+
+#messageList {
+  margin-top: 20px;
+}
+
+.message-item {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.message-item p {
+  margin: 0 0 10px 0;
+}
+
+@media (min-width: 600px) {
+  #adminPass,
+  button {
+    max-width: 400px;
+    margin: 5px auto;
+    display: block;
+  }
+}

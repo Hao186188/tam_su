@@ -1,0 +1,32 @@
+<!-- manage.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>📖 Quản lý lời tâm sự</title>
+  <link rel="stylesheet" href="manage.css" />
+</head>
+<body>
+  <h1>📖 Quản lý lời tâm sự</h1>
+
+  <!-- 🔐 Nhập mật khẩu -->
+  <div id="authBox">
+    <input type="password" id="adminPass" placeholder="🔒 Nhập mật khẩu quản lý" />
+    <button onclick="verifyPassword()">🔑 Xác nhận</button>
+  </div>
+
+  <!-- ✅ Nội dung sau khi xác minh -->
+  <div id="adminPanel" style="display: none;">
+    <h2>📬 Danh sách lời tâm sự đã nhận</h2>
+    <div id="messageList" class="message-list"></div>
+
+    <div class="button-group">
+      <button onclick="downloadMessages('txt')">📥 Tải TXT</button>
+      <button onclick="downloadMessages('json')">📥 Tải JSON</button>
+      <button onclick="clearMessages()">🗑️ Xóa tất cả</button>
+    </div>
+  </div>
+
+  <script src="manage.js"></script>
+</body>
+</html>

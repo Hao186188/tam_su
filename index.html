@@ -1,0 +1,45 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chữa lành</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- 🎵 Nhạc nền -->
+  <audio id="bgMusic" src="music.mp3" loop></audio>
+
+  <!-- 🌌 Canvas nền -->
+  <canvas id="canvas"></canvas>
+
+  <!-- 🌟 Tiêu đề -->
+  <h1>Chữa lành</h1>
+
+  <!-- 💌 Hộp thư -->
+  <div class="letter">
+    <div id="typewriter" class="typewriter"></div>
+  </div>
+
+  <!-- 🔘 Nút chức năng -->
+  <div class="buttons">
+    <button onclick="location.href='tangem/love.html'">Nơi sẽ sưởi ấm cậu</button>
+    <button onclick="toggleForm()">📝 Tâm sự với tớ ở đây</button>
+    <button id="musicToggle">🔈 Tắt nhạc</button>
+  </div>
+
+  <!-- 📝 Form nhập -->
+  <div id="form-container" style="display:none;">
+    <textarea id="userMessage" rows="5" placeholder="Tâm sự với tớ ở đây nhé..."></textarea><br>
+    <button onclick="saveMessage()">📩 Gửi tâm sự</button>
+    <button onclick="location.href='quanly/manage.html'">📖 Quản lý lời tâm sự</button>
+    <button>
+      <a href="https://www.facebook.com/tranthanhhoang186207" target="_blank">💬 Liên hệ với tớ</a>
+    </button>
+  </div>
+
+  <!-- 🚀 Script -->
+  <script src="script.js" defer></script>
+</body>
+</html>
