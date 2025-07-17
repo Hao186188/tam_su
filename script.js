@@ -1,8 +1,14 @@
 // 🌌 Canvas setup
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+
+// 🔁 Đảm bảo canvas luôn full màn hình
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
 
 // 🔊 Nhạc nền
 const music = document.getElementById("bgMusic");
@@ -75,6 +81,7 @@ function createHeart() {
   heart.className = 'heart';
   heart.style.left = Math.random() * 100 + 'vw';
   heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+  heart.style.zIndex = "2"; // bảo đảm không bị canvas che
   document.body.appendChild(heart);
   setTimeout(() => heart.remove(), 6000);
 }
@@ -85,13 +92,15 @@ function createSparkle() {
   sparkle.className = 'sparkle';
   sparkle.style.left = Math.random() * canvas.width + 'px';
   sparkle.style.top = Math.random() * canvas.height + 'px';
+  sparkle.style.zIndex = "2";
   document.body.appendChild(sparkle);
   setTimeout(() => sparkle.remove(), 3000);
 }
 
-// 🌟 Sao nền
+// 🌟 Sao nền (đã làm mờ)
 function drawStars() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(255,255,255,0.1)"; // Mờ đi 90%
   for (let i = 0; i < 100; i++) {
     const x = Math.random() * canvas.width;
     const y = Math.random() * canvas.height;
@@ -141,7 +150,6 @@ function saveMessage() {
     content: message
   };
 
-  // 🔥 Lưu vào Firebase
   db.ref("messages").push(newMsg)
     .then(() => {
       const saved = localStorage.getItem("messages") || "[]";
