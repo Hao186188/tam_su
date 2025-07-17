@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -39,7 +38,37 @@
     </button>
   </div>
 
-  <!-- 🚀 Script -->
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <!-- Cấu hình Firebase -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBHad6ioqBubsp0WgHIBjTUkwVn3dBvQDA",
+      authDomain: "loi-tam-su.firebaseapp.com",
+      databaseURL: "https://loi-tam-su-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "loi-tam-su",
+      storageBucket: "loi-tam-su.firebasestorage.app",
+      messagingSenderId: "33789310306",
+      appId: "1:33789310306:web:d24429a9576f93a86d283b",
+      measurementId: "G-JNL3CWT41P"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <!-- Script chính -->
   <script src="script.js" defer></script>
+
+  <!-- Tự động phát nhạc -->
+  <script>
+    window.addEventListener("load", () => {
+      const music = document.getElementById("bgMusic");
+      music.volume = 0.3;
+      music.play().catch(() => {
+        // Người dùng chưa tương tác, bỏ qua lỗi
+      });
+    });
+  </script>
 </body>
 </html>
