@@ -1,8 +1,22 @@
-// manage.js
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyBHad6ioqBubsp0WgHIBjTUkwVn3dBvQDA",
+  authDomain: "loi-tam-su.firebaseapp.com",
+  databaseURL: "https://loi-tam-su-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "loi-tam-su",
+  storageBucket: "loi-tam-su.firebasestorage.app",
+  messagingSenderId: "33789310306",
+  appId: "1:33789310306:web:d24429a9576f93a86d283b",
+  measurementId: "G-JNL3CWT41P"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 const correctPassword = "yeuthuong123"; // 🔐 Mật khẩu quản lý
 
 function verifyPassword() {
-  const input = document.getElementById("adminPass").value;
+  const input = document.getElementById("adminPass").value.trim();
   if (input === correctPassword) {
     document.getElementById("authBox").style.display = "none";
     document.getElementById("adminPanel").style.display = "block";
@@ -12,63 +26,62 @@ function verifyPassword() {
   }
 }
 
-// 🔄 Hiển thị danh sách tin nhắn
+// 🔄 Tải lời tâm sự từ Firebase
 function loadMessages() {
-  const saved = localStorage.getItem("messages");
-  const container = document.getElementById("messageList");
-  container.innerHTML = "";
+  const list = document.getElementById("messageList");
+  list.innerHTML = "<p>⏳ Đang tải lời tâm sự...</p>";
 
-  if (saved) {
-    const messages = JSON.parse(saved);
-    if (messages.length === 0) {
-      container.innerHTML = "<p>Chưa có lời tâm sự nào 🫧</p>";
-      return;
+  db.ref("messages").on("value", snapshot => {
+    const data = snapshot.val();
+    list.innerHTML = "";
+
+    if (data) {
+      Object.entries(data).reverse().forEach(([key, msg]) => {
+        const item = document.createElement("div");
+        item.className = "message-item";
+        item.innerHTML = `
+          <p><strong>🕒 ${msg.time}</strong></p>
+          <p>${msg.content}</p>
+          <button onclick="deleteMessage('${key}')">❌ Xóa</button>
+        `;
+        list.appendChild(item);
+      });
+    } else {
+      list.innerHTML = "<p>😢 Chưa có lời tâm sự nào.</p>";
     }
+  });
+}
 
-    messages.forEach((msg, i) => {
-      const div = document.createElement("div");
-      div.classList.add("message-item");
-      div.innerHTML = `
-        <p><strong>🕒 ${msg.time}</strong><br>${msg.content}</p>
-        <button onclick="deleteMessage(${i})">❌ Xóa</button>
-      `;
-      container.appendChild(div);
-    });
-  } else {
-    container.innerHTML = "<p>Chưa có lời tâm sự nào 🫧</p>";
+// ❌ Xóa lời nhắn riêng
+function deleteMessage(id) {
+  if (confirm("Bạn chắc muốn xóa lời tâm sự này?")) {
+    db.ref("messages/" + id).remove();
   }
 }
 
-// ❌ Xóa 1 lời nhắn
-function deleteMessage(index) {
-  const saved = JSON.parse(localStorage.getItem("messages") || "[]");
-  saved.splice(index, 1);
-  localStorage.setItem("messages", JSON.stringify(saved));
-  loadMessages();
-}
-
-// 🧹 Xóa tất cả lời nhắn
+// 🧹 Xóa toàn bộ lời nhắn
 function clearMessages() {
-  if (confirm("Bạn chắc chắn muốn xóa hết tất cả lời tâm sự?")) {
-    localStorage.removeItem("messages");
-    loadMessages();
+  if (confirm("Bạn chắc chắn muốn xóa hết tất cả lời tâm sự không?")) {
+    db.ref("messages").remove();
   }
 }
 
-// 📥 Tải về TXT hoặc JSON
+// 📥 Tải lời tâm sự về TXT hoặc JSON
 function downloadMessages(type) {
-  const saved = localStorage.getItem("messages");
-  if (!saved || saved === "[]") return alert("Không có gì để tải 😢");
+  db.ref("messages").once("value").then(snapshot => {
+    const data = snapshot.val();
+    if (!data) return alert("Không có gì để tải 😢");
 
-  const messages = JSON.parse(saved);
-  const content =
-    type === "json"
-      ? JSON.stringify(messages, null, 2)
-      : messages.map(m => `🕒 ${m.time}\n${m.content}`).join("\n\n---\n\n");
+    const messages = Object.values(data);
+    const content =
+      type === "json"
+        ? JSON.stringify(messages, null, 2)
+        : messages.map(m => `🕒 ${m.time}\n${m.content}`).join("\n\n---\n\n");
 
-  const blob = new Blob([content], { type: "text/plain" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "loi_tam_su." + (type === "json" ? "json" : "txt");
-  link.click();
+    const blob = new Blob([content], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "tam_su." + (type === "json" ? "json" : "txt");
+    link.click();
+  });
 }
