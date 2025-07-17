@@ -21,13 +21,13 @@ if (toggleBtn && music) {
     }
   };
 
-  // ✅ Tự động play sau click đầu tiên (bị chặn autoplay)
+  // ✅ Autoplay sau lần click đầu
   document.body.addEventListener("click", () => {
     if (music.paused) music.play().catch(() => {});
   }, { once: true });
 }
 
-// ✍️ Nội dung gõ từng dòng
+// ✍️ Nội dung
 const texts = [
   "Cậu có biết không?",
   "Trong cuộc sống này, mọi thứ vẫn đang lén lút yêu thương cậu.",
@@ -43,11 +43,8 @@ audio.volume = 0.4;
 
 const typewriterEl = document.getElementById("typewriter");
 const letterBox = document.querySelector('.letter');
-
-// 📢 Kênh chia sẻ dữ liệu với manage.html
 const channel = new BroadcastChannel("tam_su_channel");
 
-// 🖋 Gõ từng ký tự
 function typeNext() {
   if (textIndex < texts.length) {
     if (charIndex < texts[textIndex].length) {
@@ -72,7 +69,7 @@ function typeNext() {
   }
 }
 
-// 💗 Tim rơi
+// 💗 Hiệu ứng trái tim
 function createHeart() {
   const heart = document.createElement('div');
   heart.className = 'heart';
@@ -105,14 +102,13 @@ function drawStars() {
   }
 }
 
-// 🌈 Hiệu ứng ban đầu
 function startDecor() {
   setInterval(createHeart, 300);
   setInterval(createSparkle, 500);
   setInterval(drawStars, 100);
 }
 
-// 💌 Lưu lời nhắn
+// 🧁 Toast
 function showToast(message) {
   const toast = document.createElement("div");
   toast.className = "toast";
@@ -125,7 +121,7 @@ function showToast(message) {
   setTimeout(() => toast.remove(), 5000);
 }
 
-
+// 💌 Gửi lời nhắn
 function saveMessage() {
   const textarea = document.getElementById("userMessage");
   const btn = textarea?.nextElementSibling;
@@ -155,17 +151,15 @@ function saveMessage() {
 
   showToast("💖 Tâm sự của cậu đã được lưu lại! Có gì thì liên hệ tớ ở Facebook nha 💬");
 
-
   textarea.value = "";
   btn.disabled = false;
   btn.innerText = "Gửi tâm sự";
 
-  // Hiệu ứng sau gửi
   letterBox?.classList.add("sent");
   setTimeout(() => letterBox?.classList.remove("sent"), 1000);
 }
 
-// 🗂 Tải TXT
+// 🗂 TXT
 function downloadText() {
   const messages = JSON.parse(localStorage.getItem("messages") || "[]");
   if (!messages.length) return alert("Chưa có lời tâm sự nào để tải 😢");
@@ -178,7 +172,7 @@ function downloadText() {
   a.click();
 }
 
-// 🗃 Tải JSON
+// 🗃 JSON
 function downloadJSON() {
   const data = localStorage.getItem("messages");
   if (!data || data === "[]") return alert("Không có dữ liệu để tải 😢");
@@ -190,7 +184,7 @@ function downloadJSON() {
   a.click();
 }
 
-// 📤 Mở/đóng khung nhập
+// 📤 Toggle form
 function toggleForm() {
   const form = document.getElementById("form-container");
   if (form) {
@@ -199,8 +193,16 @@ function toggleForm() {
   }
 }
 
-// 🚀 Bắt đầu
+// 🚀 Start
 window.onload = () => {
   typeNext();
   startDecor();
 };
+// // 🗣️ Nhận tin nhắn từ trang quản lý
+// channel.onmessage = (event) => {
+//   const message = event.data;
+//   if (message && message.content) {
+//     showToast("💌 Có lời tâm sự mới từ trang quản lý!");
+//     loadMessages(); // Cập nhật danh sách tin nhắn
+//   }
+// };
